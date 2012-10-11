@@ -1,10 +1,11 @@
 backend default {
-     .host = "1.2.3.4";
+     .host = "127.0.0.1";
      .port = "8080";
 }
 
 acl purge {
-	"localhost"
+	"localhost";
+	"127.0.0.1";
 }
 
 sub vcl_recv {
