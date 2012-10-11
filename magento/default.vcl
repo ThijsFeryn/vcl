@@ -37,14 +37,17 @@ sub vcl_recv {
 	if (req.http.Authorization) {
 	    return (pass);
 	}	
+    if (req.url ~ "\.(jpeg|jpg|png|gif|ico|swf|js|css|gz|rar|txt|bzip|pdf|woff)(\?.*|)$") {
+    	unset req.http.Cookie;
+        return (lookup);
+    }	
 	if(req.url ~ "^(/index\.php)?/(admin|checkout|customer)"){
 		return(pass);
 	}
 	
 	if (req.http.cookie ~ "nocache(_stable)?") {
 	    return (pass);
-	}
-	
+	}	
 	set req.http.Cookie = regsuball(req.http.Cookie, "(^|; ) *__utm.=[^;]+;? *", "\1");
     if (req.http.Cookie == "") {
         remove req.http.Cookie;
